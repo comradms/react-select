@@ -1141,7 +1141,15 @@ export default class Select extends Component<Props, State> {
       this.menuListRef &&
       !this.menuListRef.contains(event.target)
     ) {
-      this.blurInput();
+      try {
+        const targetArray = event.composedPath();
+        const target = Array.isArray(targetArray) && targetArray.length > 0 ? targetArray[0] : null;
+        if (!this.controlRef.contains(target) && !this.menuListRef.contains(target)) {
+          this.blurInput();
+        }
+      } catch {
+        this.blurInput();
+      }
     }
 
     // reset move vars
